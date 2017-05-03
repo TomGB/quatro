@@ -20,7 +20,7 @@
     allPieces.push({
       white: parseInt(num.charAt(0)),
       cross: parseInt(num.charAt(1)),
-      tall: parseInt(num.charAt(2)),
+      green: parseInt(num.charAt(2)),
       circle: parseInt(num.charAt(3)),
       num: i
     });
@@ -49,7 +49,7 @@
 
     c.fillStyle = piece.white ? 'white' : 'black';
 
-    c.strokeStyle = piece.tall ? 'green' : 'red';
+    c.strokeStyle = piece.green ? 'green' : 'red';
 
     if (piece.circle) {
       circle(c, x, y, size, size);
@@ -100,7 +100,10 @@
     c.fillStyle = "black";
 
     c.font = "30px Arial";
-    c.fillText((turn%2?playerTwo:playerOne)+'\'s turn', 110, 80);
+
+    var turnText = (turn%2?playerTwo:playerOne)+'\'s turn, '+
+    (pieceSelected?'place the piece':'select a piece for ' + (turn%2?playerOne:playerTwo)+' to place.');
+    c.fillText(turnText, 110, 80);
   }
 
   function playTurn(e) {
@@ -118,6 +121,7 @@
           pieceSelected = piece;
           index = allPieces.indexOf(piece);
           console.log('selected piece:',piece.num);
+          turn ++;
         }
       });
       if (index != -1) {
@@ -136,13 +140,64 @@
           ) {
             board[i][j] = pieceSelected;
             pieceSelected = null;
-            turn ++;
+
+            checkWin();
 
             draw();
           }
         }
       }
     }
+  }
+
+  function checkFour(pieces) {
+
+    // console.log(pieces);
+
+    var allThere = true;
+
+    pieces.forEach((piece) => {
+      if(piece == null){
+        allThere = false;
+      }
+    });
+
+    if(!allThere){
+      return false;
+    }
+
+    var attr = ['cross', 'green', 'circle', 'white'];
+
+    for (var i = 0; i < attr.length; i++) {
+
+      var allFalse = true;
+      var allTrue = true;
+
+      pieces.forEach((piece) => {
+        if (piece[attr[i]]) {
+          allFalse = false;
+        } else {
+          allTrue = false;
+        }
+      });
+
+      if(allTrue){
+        alert("match on "+ attr[i]);
+      }
+      if(allFalse){
+        alert("match on not "+ attr[i]);
+      }
+    }
+  }
+
+  function checkWin() {
+    for (var i = 0; i < 4; i++) {
+      checkFour([board[i][0], board[i][1], board[i][2], board[i][3]]);
+      checkFour([board[0][i], board[1][i], board[2][i], board[3][i]]);
+    }
+
+    checkFour([board[0][0], board[1][1], board[2][2], board[3][3]]);
+    checkFour([board[0][3], board[1][2], board[2][1], board[3][0]]);
   }
 
   canvas.addEventListener('click', playTurn, false);
