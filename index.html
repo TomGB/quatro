@@ -7,7 +7,6 @@
 
   for (var i = 0; i < 16; i++) {
     var num = ("000000000" + i.toString(2)).substr(-4);
-    console.log(num);
 
     allPieces.push({
       white: parseInt(num.charAt(0)),
@@ -18,31 +17,58 @@
     });
   }
 
-  allPieces.forEach((piece) => {
-    console.log(piece.white);
+  function circle(c, startX, startY, width, height) {
+    width = width / 2;
+    height = height / 2;
+    c.beginPath();
+    c.arc(startX + width, startY + height, width, height, 0, 2 * Math.PI);
+    c.fill();
+    c.stroke();
+  }
+
+  c.strokeStyle = 'black';
+  c.lineWidth = 4;
+
+  allPieces.forEach(function (piece) {
     c.fillStyle = piece.white ? 'white' : 'black';
-    c.strokeStyle = 'black';
-    c.fillRect(20 + 40 * piece.num, 20, 20, 20);
-    c.strokeRect(20 + 40 * piece.num, 20, 20, 20);
 
-    console.log(piece.cross);
-    c.fillStyle = piece.cross ? 'white' : 'black';
-    c.strokeStyle = 'black';
-    c.fillRect(20 + 40 * piece.num, 50, 20, 20);
-    c.strokeRect(20 + 40 * piece.num, 50, 20, 20);
+    c.strokeStyle = piece.tall ? 'green' : 'red';
 
-    console.log(piece.tall);
-    c.fillStyle = piece.tall ? 'white' : 'black';
-    c.strokeStyle = 'black';
-    c.fillRect(20 + 40 * piece.num, 80, 20, 20);
-    c.strokeRect(20 + 40 * piece.num, 80, 20, 20);
+    if (piece.circle) {
+      circle(c, 20 + 40 * piece.num, 20, 20, 20);
+    } else {
+      c.fillRect(20 + 40 * piece.num, 20, 20, 20);
+      c.strokeRect(20 + 40 * piece.num, 20, 20, 20);
+    }
 
-    console.log(piece.circle);
-    c.fillStyle = piece.circle ? 'white' : 'black';
-    c.strokeStyle = 'black';
-    c.fillRect(20 + 40 * piece.num, 110, 20, 20);
-    c.strokeRect(20 + 40 * piece.num, 110, 20, 20);
+    if (piece.cross) {
+      c.strokeStyle = piece.white ? 'black' : 'white';
+      c.beginPath();
+      c.moveTo(20 + 40 * piece.num, 20);
+      c.lineTo(40 + 40 * piece.num, 40);
+      c.moveTo(40 + 40 * piece.num, 20);
+      c.lineTo(20 + 40 * piece.num, 40);
+      c.stroke();
+    }
   });
 
-  console.log(allPieces);
+  var turn = 0;
+
+  var pieceSelected = null;
+
+  function playTurn(e){
+    if(pieceSelected == null) {
+      console.log('select piece');
+      allPieces.forEach((piece) => {
+        if( e.x > 20 + 40 * piece.num && e.x < 20 + 40 * piece.num + 20 && e.y > 20, e.y < 40) {
+          console.log('in piece '+piece.num);
+        }
+      });
+    } else {
+      console.log('place piece');
+    }
+  }
+
+  canvas.addEventListener('click', playTurn, false);
+
 </script>
