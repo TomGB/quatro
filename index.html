@@ -3,6 +3,15 @@
   var canvas = document.getElementById('canvas');
   var c = canvas.getContext('2d');
 
+  var board = [];
+
+  for (var i = 0; i < 4; i++) {
+    board.push([]);
+    for (var j = 0; j < 4; j++) {
+      board[i][j] = null;
+    }
+  }
+
   var allPieces = [];
 
   for (var i = 0; i < 16; i++) {
@@ -26,46 +35,113 @@
     c.stroke();
   }
 
-  c.strokeStyle = 'black';
-  c.lineWidth = 4;
+  var turn = 0;
 
-  allPieces.forEach(function (piece) {
+  var playerOne = "Tom";
+  var playerTwo = "Ali";
+
+  var pieceSelected = null;
+
+  draw();
+
+  function drawPiece(piece, x, y, size) {
+    c.lineWidth = size / 5;
+
     c.fillStyle = piece.white ? 'white' : 'black';
 
     c.strokeStyle = piece.tall ? 'green' : 'red';
 
     if (piece.circle) {
-      circle(c, 20 + 40 * piece.num, 20, 20, 20);
+      circle(c, x, y, size, size);
     } else {
-      c.fillRect(20 + 40 * piece.num, 20, 20, 20);
-      c.strokeRect(20 + 40 * piece.num, 20, 20, 20);
+      c.fillRect(x, y, size, size);
+      c.strokeRect(x, y, size, size);
     }
 
     if (piece.cross) {
       c.strokeStyle = piece.white ? 'black' : 'white';
       c.beginPath();
-      c.moveTo(20 + 40 * piece.num, 20);
-      c.lineTo(40 + 40 * piece.num, 40);
-      c.moveTo(40 + 40 * piece.num, 20);
-      c.lineTo(20 + 40 * piece.num, 40);
+      c.moveTo(x, y);
+      c.lineTo(x + size, y + size);
+      c.moveTo(x + size, y);
+      c.lineTo(x, y + size);
       c.stroke();
     }
-  });
+  }
 
-  var turn = 0;
+  function draw() {
 
-  var pieceSelected = null;
+    c.clearRect(0, 0, canvas.width, canvas.height);
 
-  function playTurn(e){
+    allPieces.forEach(function (piece) {
+      drawPiece(piece, 20 + 40 * piece.num, 20, 20);
+    });
+
+    for (var i = 0; i < 4; i++) {
+      for (var j = 0; j < 4; j++) {
+        c.strokeStyle = 'black';
+        c.lineWidth = 1;
+        c.strokeRect(100 + i*100, 100 + j*100, 100, 100)
+      }
+    }
+
+    for (var i = 0; i < 4; i++) {
+      for (var j = 0; j < 4; j++) {
+        if(board[i][j] != null){
+          drawPiece(board[i][j], 110 + i * 100, 110 + j * 100, 80);
+        }
+      }
+    }
+
+    if(pieceSelected != null) {
+      drawPiece(pieceSelected, 560, 160, 80);
+    }
+
+    c.fillStyle = "black";
+
+    c.font = "30px Arial";
+    c.fillText((turn%2?playerTwo:playerOne)+'\'s turn', 110, 80);
+  }
+
+  function playTurn(e) {
+    var x = e.x - canvas.offsetLeft;
+    var y = e.y - canvas.offsetTop;
     if(pieceSelected == null) {
-      console.log('select piece');
+      var index = -1;
       allPieces.forEach((piece) => {
-        if( e.x > 20 + 40 * piece.num && e.x < 20 + 40 * piece.num + 20 && e.y > 20, e.y < 40) {
-          console.log('in piece '+piece.num);
+        if(
+          x > 20 + 40 * piece.num &&
+          x < 20 + 40 * piece.num + 20 &&
+          y > 20 &&
+          y < 40
+        ) {
+          pieceSelected = piece;
+          index = allPieces.indexOf(piece);
+          console.log('selected piece:',piece.num);
         }
       });
+      if (index != -1) {
+        allPieces.splice(index, 1);
+      }
+      draw();
     } else {
-      console.log('place piece');
+      for (var i = 0; i < 4; i++) {
+        for (var j = 0; j < 4; j++) {
+          if (
+            board[i][j] == null &&
+            x > 100 + i * 100 &&
+            x < 100 + i * 100 + 100 &&
+            y > 100 + j * 100 &&
+            y < 100 + j * 100 + 100
+          ) {
+            board[i][j] = pieceSelected;
+            pieceSelected = null;
+            turn ++;
+
+            draw();
+          }
+        }
+      }
     }
   }
 
