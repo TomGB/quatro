@@ -4,14 +4,6 @@
   var c = canvas.getContext('2d');
 
   var board = [];
-  var turn = 0;
-
-  var playerOne = "Tom";
-  var playerTwo = "Ali";
-
-  var pieceSelected = null;
-
-  var playerWon = false;
 
   for (var i = 0; i < 4; i++) {
     board.push([]);
@@ -26,32 +18,55 @@
     var num = ("000000000" + i.toString(2)).substr(-4);
 
     allPieces.push({
-      tl: parseInt(num.charAt(0)),
-      tr: parseInt(num.charAt(1)),
-      bl: parseInt(num.charAt(2)),
-      br: parseInt(num.charAt(3)),
+      white: parseInt(num.charAt(0)),
+      cross: parseInt(num.charAt(1)),
+      green: parseInt(num.charAt(2)),
+      circle: parseInt(num.charAt(3)),
       num: i
     });
   }
+
+  function circle(c, startX, startY, width, height) {
+    width = width / 2;
+    height = height / 2;
+    c.beginPath();
+    c.arc(startX + width, startY + height, width, height, 0, 2 * Math.PI);
+    c.fill();
+    c.stroke();
+  }
+
+  var turn = 0;
+
+  var playerOne = "Tom";
+  var playerTwo = "Ali";
+
+  var pieceSelected = null;
 
   draw();
 
   function drawPiece(piece, x, y, size) {
     c.lineWidth = size / 5;
 
-    c.fillStyle = piece.tl ? 'white' : 'black';
-    c.fillRect(x, y, size / 2, size / 2);
+    c.fillStyle = piece.white ? 'white' : 'black';
 
-    c.fillStyle = piece.tr ? 'white' : 'black';
-    c.fillRect(x + size / 2, y, size / 2, size / 2);
+    c.strokeStyle = piece.green ? 'green' : 'red';
 
-    c.fillStyle = piece.bl ? 'white' : 'black';
-    c.fillRect(x, y + size / 2, size / 2, size / 2);
+    if (piece.circle) {
+      circle(c, x, y, size, size);
+    } else {
+      c.fillRect(x, y, size, size);
+      c.strokeRect(x, y, size, size);
+    }
 
-    c.fillStyle = piece.br ? 'white' : 'black';
-    c.fillRect(x + size / 2, y + size / 2, size / 2, size / 2);
-
-    c.strokeRect(x, y, size, size);
+    if (piece.cross) {
+      c.strokeStyle = piece.white ? 'black' : 'white';
+      c.beginPath();
+      c.moveTo(x, y);
+      c.lineTo(x + size, y + size);
+      c.moveTo(x + size, y);
+      c.lineTo(x, y + size);
+      c.stroke();
+    }
   }
 
   function draw() {
@@ -83,66 +98,52 @@
     }
 
     c.fillStyle = "black";
+
     c.font = "30px Arial";
 
     var turnText = (turn%2?playerTwo:playerOne)+'\'s turn, '+
     (pieceSelected?'place the piece':'select a piece for ' + (turn%2?playerOne:playerTwo)+' to place.');
     c.fillText(turnText, 110, 80);
-
-    if (playerWon) {
-      var winText = (turn%2?playerTwo:playerOne)+' has won!';
-
-      c.fillStyle = "rgba(255,255,255,0.8)";
-      c.fillRect(150,150,360,100);
-
-      c.fillStyle = "black";
-      c.font = "50px Arial";
-      c.fillText(winText, 190, 220);
-    }
   }
 
   function playTurn(e) {
-    if(playerWon) {
-      window.location = window.location.href
-    } else {
-      var x = e.x - canvas.offsetLeft;
-      var y = e.y - canvas.offsetTop;
-      if(pieceSelected == null) {
-        var index = -1;
-        allPieces.forEach((piece) => {
-          if(
-            x > 20 + 40 * piece.num &&
-            x < 20 + 40 * piece.num + 20 &&
-            y > 20 &&
-            y < 40
-          ) {
-            pieceSelected = piece;
-            index = allPieces.indexOf(piece);
-            console.log('selected piece:',piece.num);
-            turn ++;
-          }
-        });
-        if (index != -1) {
-          allPieces.splice(index, 1);
+    var x = e.x - canvas.offsetLeft;
+    var y = e.y - canvas.offsetTop;
+    if(pieceSelected == null) {
+      var index = -1;
+      allPieces.forEach((piece) => {
+        if(
+          x > 20 + 40 * piece.num &&
+          x < 20 + 40 * piece.num + 20 &&
+          y > 20 &&
+          y < 40
+        ) {
+          pieceSelected = piece;
+          index = allPieces.indexOf(piece);
+          console.log('selected piece:',piece.num);
+          turn ++;
         }
-        draw();
-      } else {
-        for (var i = 0; i < 4; i++) {
-          for (var j = 0; j < 4; j++) {
-            if (
-              board[i][j] == null &&
-              x > 100 + i * 100 &&
-              x < 100 + i * 100 + 100 &&
-              y > 100 + j * 100 &&
-              y < 100 + j * 100 + 100
-            ) {
-              board[i][j] = pieceSelected;
-              pieceSelected = null;
+      });
+      if (index != -1) {
+        allPieces.splice(index, 1);
+      }
+      draw();
+    } else {
+      for (var i = 0; i < 4; i++) {
+        for (var j = 0; j < 4; j++) {
+          if (
+            board[i][j] == null &&
+            x > 100 + i * 100 &&
+            x < 100 + i * 100 + 100 &&
+            y > 100 + j * 100 &&
+            y < 100 + j * 100 + 100
+          ) {
+            board[i][j] = pieceSelected;
+            pieceSelected = null;
 
-              checkWin();
+            checkWin();
 
-              draw();
-            }
+            draw();
           }
         }
       }
@@ -150,6 +151,9 @@
   }
 
   function checkFour(pieces) {
+
+    // console.log(pieces);
+
     var allThere = true;
 
     pieces.forEach((piece) => {
@@ -162,7 +166,7 @@
       return false;
     }
 
-    var attr = ['tr', 'bl', 'br', 'tl'];
+    var attr = ['cross', 'green', 'circle', 'white'];
 
     for (var i = 0; i < attr.length; i++) {
 
@@ -179,8 +183,11 @@
 
       draw();
 
-      if(allTrue || allFalse){
-        playerWon = true;
+      if(allTrue){
+        alert("match on "+ attr[i]);
+      }
+      if(allFalse){
+        alert("match on not "+ attr[i]);
       }
     }
   }
