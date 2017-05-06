@@ -12,7 +12,6 @@ function checkWin(game) {
 }
 
 function checkFour(fourPieces) {
-  console.log(fourPieces);
   var allThere = true;
 
   fourPieces.forEach((piece) => {
@@ -25,21 +24,28 @@ function checkFour(fourPieces) {
     return false;
   }
 
-  var attr = ['tr', 'bl', 'br', 'tl'];
+  console.log(fourPieces);
+
+  var attr = ['tl', 'tr', 'bl', 'br'];
 
   for (var i = 0; i < attr.length; i++) {
-
     var allFalse = true;
     var allTrue = true;
 
     fourPieces.forEach((piece) => {
       if (piece[attr[i]]) {
+        console.log('on');
         allFalse = false;
       } else {
         allTrue = false;
+        console.log('off');
       }
     });
-    
-    return (allTrue || allFalse);
+
+    if (allTrue || allFalse) {
+      return true;
+    }
   }
+
+  return false;
 }

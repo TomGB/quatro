@@ -33,10 +33,11 @@ var game = {
   board: [],
   turn: 0,
   playerOne: "Tom",
-  playerTwo: "Ali",
+  playerTwo: "Tim",
   pieceSelected: null,
   playerWon: false,
   allPieces: [],
+  useAI: true,
 }
 
 game.board = createBoard();
@@ -53,23 +54,24 @@ function playTurn(e) {
     var y = e.y - canvas.offsetTop;
     if(game.pieceSelected == null) {
       var index = -1;
-
-      game.allPieces.forEach((piece) => {
+      for (var i = 0; i < game.allPieces.length; i++) {
         if (
-          x > 20 + 40 * piece.num &&
-          x < 20 + 40 * piece.num + 20 &&
+          x > 20 + 40 * i &&
+          x < 20 + 40 * i + 20 &&
           y > 20 &&
           y < 40
         ) {
-          game.pieceSelected = piece;
-          index = game.allPieces.indexOf(piece);
-          console.log('selected piece:',piece.num);
+          game.pieceSelected = game.allPieces[i];
+          console.log('selected piece:', game.allPieces[i].num);
           game.turn ++;
+          index = i;
         }
-      });
+      }
+
       if (index != -1) {
         game.allPieces.splice(index, 1);
       }
+
       draw(game);
     } else {
       for (var i = 0; i < 4; i++) {

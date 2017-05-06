@@ -5,9 +5,9 @@ function draw(game) {
 
   c.clearRect(0, 0, canvas.width, canvas.height);
 
-  game.allPieces.forEach(piece => {
-    drawPiece(c, piece, 20 + 40 * piece.num, 20, 20);
-  });
+  for (var i = 0; i < game.allPieces.length; i++) {
+    drawPiece(c, game.allPieces[i], 20 + 40 * i, 20, 20);
+  }
 
   for (var i = 0; i < 4; i++) {
     for (var j = 0; j < 4; j++) {
@@ -34,18 +34,22 @@ function draw(game) {
 
   var turnText = (game.turn%2?game.playerTwo:game.playerOne)+'\'s turn, '+
   (game.pieceSelected?'place the piece':'select a piece for ' + (game.turn%2?game.playerOne:game.playerTwo)+' to place.');
-  c.fillText(turnText, 110, 80);
+  c.fillText(turnText, 40, 80);
 
   if (game.playerWon) {
-    var winText = (game.turn%2?game.playerTwo:game.playerOne)+' has won!';
-
-    c.fillStyle = "rgba(255,255,255,0.8)";
-    c.fillRect(150,150,360,100);
-
-    c.fillStyle = "black";
-    c.font = "50px Arial";
-    c.fillText(winText, 190, 220);
+    drawPlayerWon(c, game);
   }
+}
+
+function drawPlayerWon(c, game) {
+  var winText = (game.turn%2?game.playerTwo:game.playerOne)+' has won!';
+
+  c.fillStyle = "rgba(255,255,255,0.8)";
+  c.fillRect(150,150,360,100);
+
+  c.fillStyle = "black";
+  c.font = "50px Arial";
+  c.fillText(winText, 190, 220);
 }
 
 function drawPiece(c, piece, x, y, size) {
