@@ -1,4 +1,4 @@
-function generatePieces() {
+ function generatePieces() {
   var piecesArray = [];
 
   for (var i = 0; i < 16; i++) {
@@ -87,12 +87,32 @@ function playTurn(e) {
             console.log(game.board);
             game.pieceSelected = null;
 
-            game.playerWon = checkWin(game);
+            game.playerWon = checkWin(game.board);
 
             draw(game);
+
+            if (game.useAI) {
+              makeAIMove();
+            }
           }
         }
       }
+    }
+  }
+}
+
+function makeAIMove() {
+  var tempBoard = JSON.parse(JSON.stringify(game.board));
+
+  for (var i = 0; i < tempBoard.length; i++) {
+    for (var j = 0; j < tempBoard[i].length; j++) {
+      if (tempBoard[i][j] == null) {
+        for (var p = 0; p < game.allPieces.length; p++) {
+          tempBoard[i][j] = game.allPieces[p];
+          console.log(checkWin(tempBoard));
+        }
+      }
+      tempBoard = JSON.parse(JSON.stringify(game.board));
     }
   }
 }

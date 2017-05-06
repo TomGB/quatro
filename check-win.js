@@ -1,12 +1,12 @@
-function checkWin(game) {
+function checkWin(board) {
   var won = 0;
   for (var i = 0; i < 4; i++) {
-    won += checkFour([game.board[i][0], game.board[i][1], game.board[i][2], game.board[i][3]]);
-    won += checkFour([game.board[0][i], game.board[1][i], game.board[2][i], game.board[3][i]]);
+    won += checkFour([board[i][0], board[i][1], board[i][2], board[i][3]]);
+    won += checkFour([board[0][i], board[1][i], board[2][i], board[3][i]]);
   }
 
-  won += checkFour([game.board[0][0], game.board[1][1], game.board[2][2], game.board[3][3]]);
-  won += checkFour([game.board[0][3], game.board[1][2], game.board[2][1], game.board[3][0]]);
+  won += checkFour([board[0][0], board[1][1], board[2][2], board[3][3]]);
+  won += checkFour([board[0][3], board[1][2], board[2][1], board[3][0]]);
 
   return won;
 }
@@ -34,11 +34,9 @@ function checkFour(fourPieces) {
 
     fourPieces.forEach((piece) => {
       if (piece[attr[i]]) {
-        console.log('on');
         allFalse = false;
       } else {
         allTrue = false;
-        console.log('off');
       }
     });
 
