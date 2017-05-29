@@ -1,4 +1,4 @@
-function on_empty_space_clicked(x, y, game) {
+function onEmptySpaceClicked(x, y, game) {
   for (var i = 0; i < 4; i++) {
     for (var j = 0; j < 4; j++) {
       if (
@@ -20,7 +20,7 @@ function on_empty_space_clicked(x, y, game) {
   }
 }
 
-function try_select_piece(x, y, game) {
+function trySelectPiece(x, y, game) {
   var index = -1;
   for (var i = 0; i < game.allPieces.length; i++) {
     if (
@@ -48,4 +48,13 @@ function try_select_piece(x, y, game) {
       AISelectPiece(game);
     }
   }
+}
+
+function checkButtonClick(x, y, buttonArray) {
+  buttonArray.forEach((button) => {
+    if(x > button.x && x < button.x + button.width && y > button.y && y < button.y + button.height){
+      console.log('inside button');
+      button.onClick();
+    }
+  });
 }

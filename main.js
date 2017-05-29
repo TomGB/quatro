@@ -1,4 +1,4 @@
-var game = {
+const game = {
   gameStarted: false,
   board: [],
   turn: 0,
@@ -16,23 +16,49 @@ game.allPieces = generatePieces();
 
 // draw(game);
 
+const buttonArray = [];
+
+buttonArray.push(
+  new Button({
+    x: 50,
+    y: 50,
+    text: 'Human vs Human Game',
+    onClick: () => {
+      console.log('hi Human');
+    },
+  })
+);
+
+console.log(buttonArray);
+
+buttonArray.push(
+  new Button({
+    x: 50,
+    y: 130,
+    text: 'Human vs AI Game',
+    onClick: () => {
+      console.log('hi AI');
+    },
+  })
+);
+
 displayMenu(game);
 
 function userClick(e) {
+  var x = e.x - canvas.offsetLeft;
+  var y = e.y - canvas.offsetTop;
   if(game.gameStarted){
     if(game.playerWon) {
       window.location = window.location.href
     } else {
-      var x = e.x - canvas.offsetLeft;
-      var y = e.y - canvas.offsetTop;
       if(game.pieceSelected == null) {
-        try_select_piece(x, y, game);
+        trySelectPiece(x, y, game);
       } else {
-        on_empty_space_clicked(x, y, game);
+        onEmptySpaceClicked(x, y, game);
       }
     }
   } else {
-
+    checkButtonClick(x, y, buttonArray);
   }
 }
 
