@@ -32,8 +32,8 @@ function createBoard() {
 var game = {
   board: [],
   turn: 0,
-  playerOne: "Rob",
-  playerTwo: "AI",
+  playerOne: "Human",
+  playerTwo: "Bot",
   pieceSelected: null,
   playerWon: false,
   allPieces: [],
