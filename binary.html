@@ -6,7 +6,7 @@
   var allPieces = [];
 
   for (var i = 0; i < 16; i++) {
-    var num = ("000000000" + i.toString(2)).substr(-4);
+    var num = ("000" + i.toString(2)).substr(-4);
     console.log(num);
 
     allPieces.push({

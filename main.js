@@ -46,6 +46,22 @@ game.allPieces = generatePieces();
 
 draw(game);
 
+function on_empty_space_clicked(x, y, board, callback) {
+  for (var i = 0; i < 4; i++) {
+    for (var j = 0; j < 4; j++) {
+      if (
+        board[i][j] == null &&
+        x > 100 + i * 100 &&
+        x < 100 + i * 100 + 100 &&
+        y > 100 + j * 100 &&
+        y < 100 + j * 100 + 100
+      ) {
+        callback(i, j);
+      }
+    }
+  }
+}
+
 function playTurn(e) {
   if(game.playerWon) {
     window.location = window.location.href
@@ -81,25 +97,15 @@ function playTurn(e) {
         }
       }
     } else {
-      for (var i = 0; i < 4; i++) {
-        for (var j = 0; j < 4; j++) {
-          if (
-            game.board[i][j] == null &&
-            x > 100 + i * 100 &&
-            x < 100 + i * 100 + 100 &&
-            y > 100 + j * 100 &&
-            y < 100 + j * 100 + 100
-          ) {
-            game.board[i][j] = game.pieceSelected;
-            console.log(game.board);
-            game.pieceSelected = null;
+      on_empty_space_clicked(x, y, game.board, (i, j) => {
+        game.board[i][j] = game.pieceSelected;
+        console.log(game.board);
+        game.pieceSelected = null;
 
-            game.playerWon = checkWin(game.board);
+        game.playerWon = checkWin(game.board);
 
-            draw(game);
-          }
-        }
-      }
+        draw(game);
+      });
     }
   }
 }
