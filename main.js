@@ -14,8 +14,6 @@ game.board = createBoard();
 
 game.allPieces = generatePieces();
 
-// draw(game);
-
 const buttonArray = [];
 
 buttonArray.push(
@@ -23,21 +21,27 @@ buttonArray.push(
     x: 50,
     y: 50,
     text: 'Human vs Human Game',
-    onClick: () => {
-      console.log('hi Human');
+    onClick: (game) => {
+      console.log('setting game to human v human');
+      game.gameStarted = true;
+      game.useAI = false;
+      game.playerOne = 'Alpha'
+      game.playerTwo = 'Beta'
+      draw(game);
     },
   })
 );
-
-console.log(buttonArray);
 
 buttonArray.push(
   new Button({
     x: 50,
     y: 130,
     text: 'Human vs AI Game',
-    onClick: () => {
-      console.log('hi AI');
+    onClick: (game) => {
+      console.log('setting game to human v ai');
+      game.gameStarted = true;
+      game.useAI = true;
+      draw(game);
     },
   })
 );
@@ -58,7 +62,7 @@ function userClick(e) {
       }
     }
   } else {
-    checkButtonClick(x, y, buttonArray);
+    checkButtonClick(x, y, buttonArray, game);
   }
 }
 
