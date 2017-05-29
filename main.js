@@ -1,4 +1,5 @@
 var game = {
+  gameStarted: false,
   board: [],
   turn: 0,
   playerOne: "Human",
@@ -13,20 +14,26 @@ game.board = createBoard();
 
 game.allPieces = generatePieces();
 
-draw(game);
+// draw(game);
 
-function playTurn(e) {
-  if(game.playerWon) {
-    window.location = window.location.href
-  } else {
-    var x = e.x - canvas.offsetLeft;
-    var y = e.y - canvas.offsetTop;
-    if(game.pieceSelected == null) {
-      try_select_piece(x, y, game);
+displayMenu(game);
+
+function userClick(e) {
+  if(game.gameStarted){
+    if(game.playerWon) {
+      window.location = window.location.href
     } else {
-      on_empty_space_clicked(x, y, game);
+      var x = e.x - canvas.offsetLeft;
+      var y = e.y - canvas.offsetTop;
+      if(game.pieceSelected == null) {
+        try_select_piece(x, y, game);
+      } else {
+        on_empty_space_clicked(x, y, game);
+      }
     }
+  } else {
+
   }
 }
 
-canvas.addEventListener('click', playTurn, false);
+canvas.addEventListener('click', userClick, false);

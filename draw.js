@@ -68,3 +68,19 @@ function drawQuater(c, attr, x, y, size) {
   c.fillStyle = attr ? 'white' : 'black';
   c.fillRect(x, y, size, size);
 }
+
+function drawButton(c, x, y, text) {
+  const margin = 15;
+  const fontSize = 40;
+  c.font = `${fontSize}px Arial`;
+  c.strokeRect(x, y, c.measureText(text).width + margin * 2, fontSize * 0.8 + margin * 2);
+  c.fillText(text, x + margin, y + fontSize * 0.8 + margin);
+}
+
+function displayMenu(game) {
+  var canvas = document.getElementById('canvas');
+  var c = canvas.getContext('2d');
+
+  drawButton(c, 50, 50, 'Human vs Human Game');
+  drawButton(c, 50, 130, 'Human vs AI Game');
+}
