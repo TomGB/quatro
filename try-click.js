@@ -50,7 +50,7 @@ function trySelectPiece(x, y, game) {
   }
 }
 
-function checkButtonClick(x, y, buttonArray, game) {
+function checkButtonClick(x, y, game) {
   buttonArray.forEach((button) => {
     if(x > button.x && x < button.x + button.width && y > button.y && y < button.y + button.height){
       console.log('inside button');
