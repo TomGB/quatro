@@ -3,8 +3,15 @@ import logo from './logo.svg';
 import './App.css';
 import GameSelect from './game-select.js'
 
-function PieceSelect({text}) {
-  return (<h2>{text}</h2>);
+function PieceSelect({pieces}) {
+
+  return (
+    <div className='selectme'>
+      {pieces.map(piece =>
+        (<h1>hi</h1>)
+      )}
+    </div>
+  );
 }
 
 function TurnMessage({text}) {
@@ -16,7 +23,27 @@ function GameBoard({text}) {
 }
 
 const game = {
-  gameStarted: true
+  gameStarted: true,
+  pieces: [
+    {
+      tl: 1,
+      tr: 1,
+      bl:1,
+      br:1
+    },
+    {
+      tl: 1,
+      tr: 0,
+      bl:0,
+      br:1
+    },
+    {
+      tl: 0,
+      tr: 0,
+      bl:0,
+      br:0
+    }
+  ]
 }
 
 class App extends Component {
@@ -30,8 +57,8 @@ class App extends Component {
       );
     } else {
       return (
-        <div className='boardArea'>
-          <PieceSelect />
+        <div className='gameArea'>
+          <PieceSelect pieces={game.pieces}/>
           <TurnMessage text="Humans's turn to do bla"/>
           <GameBoard />
         </div>
