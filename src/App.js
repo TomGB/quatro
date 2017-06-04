@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import GameSelect from './components/game-select.js';
-import PieceSelect from './components/piece-select.js';
+import GameSelect from './components/game-select.js'
+import PieceSelect from './components/piece-select.js'
+import Piece from './components/piece.js'
 import generatePieces from './gameLogic/generate-pieces.js'
 import generateBoard from './gameLogic/generate-board.js'
 
@@ -13,23 +14,19 @@ function TurnMessage({text}) {
 function GameBoard({board}) {
   return (
     <div className='board'>
-      {board.map(row =>
-        row.map(piece => {
-          if (piece) {
-            console.log('in piece');
-            (
-              <div className='piece'>
-                <div className={(piece.tl?'black':'white')+' pieceQuater'}></div>
-                <div className={(piece.tr?'black':'white')+' pieceQuater'}></div>
-                <div className={(piece.bl?'black':'white')+' pieceQuater'}></div>
-                <div className={(piece.br?'black':'white')+' pieceQuater'}></div>
-              </div>
-            )
-          }
-        })
-      )}
+      {
+        board.map(row =>
+          row.map(space =>
+            <div className='space' key={space.id}>
+              {space.piece?
+                <Piece piece={space.piece}/>
+              : null}
+            </div>
+          )
+        )
+      }
     </div>
-  );
+  )
 }
 
 const game = {
@@ -37,6 +34,8 @@ const game = {
   pieces: generatePieces(),
   board: generateBoard(),
 }
+
+console.log(game.board);
 
 class App extends Component {
   render() {

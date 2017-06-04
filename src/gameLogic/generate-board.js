@@ -5,10 +5,8 @@ export default function generateBoard() {
     board.push([]);
     for (var j = 0; j < 4; j++) {
       board[i][j] = {
-        tl:1,
-        tr:1,
-        bl:0,
-        br:1,
+        piece: null,
+        id: i+ j*4,
       };
     }
   }
