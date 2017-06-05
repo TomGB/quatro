@@ -5,7 +5,6 @@ import GameSelect from './components/game-select.js'
 import PieceSelect from './components/piece-select.js'
 import Piece from './components/piece.js'
 import generatePieces from './gameLogic/generate-pieces.js'
-import generateBoard from './gameLogic/generate-board.js'
 
 function TurnMessage({text}) {
   return (<h2>{text}</h2>);
@@ -16,13 +15,17 @@ function GameBoard({board}) {
     <div className='board'>
       {
         board.map(row =>
-          row.map(space =>
-            <div className='space' key={space.id}>
-              {space.piece?
-                <Piece piece={space.piece}/>
-              : null}
-            </div>
-          )
+          <div className='row'>
+            {
+              row.map(space =>
+                <div className='space' key={space.id}>
+                  {space.piece?
+                    <Piece piece={space.piece}/>
+                  : null}
+                </div>
+              )
+            }
+          </div>
         )
       }
     </div>
@@ -38,6 +41,17 @@ const game = {
 console.log(game.board);
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      history: [
+        {
+          board: Array(4).fill(Array(4).fill());
+        }
+      ]
+    };
+  }
+
   render() {
     if (!game.gameStarted) {
       return (

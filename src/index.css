@@ -13,6 +13,12 @@ body {
   line-height: 0px;
 }
 
+.selectme .piece {
+  width: 30px;
+  height: 30px;
+  border: solid black 5px;
+}
+
 .pieceQuater {
   width: 50%;
   height: 50%;
@@ -21,4 +27,14 @@ body {
 
 .pieceQuater.black{
   background-color: black;
+}
+
+.board {
+  display: inline-block;
+  border: 1px solid black;
+}
+
+.board .space{
+  display: inline-block;
+  border: 1px solid black;
 }

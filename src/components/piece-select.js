@@ -5,7 +5,7 @@ export default function PieceSelect({pieces}) {
   return (
     <div className='selectme'>
       {pieces.map(piece =>
-        <Piece piece={piece} id={piece.num} />
+        <Piece piece={piece} key={piece.num} />
       )}
     </div>
   );
