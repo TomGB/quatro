@@ -4,20 +4,31 @@ body {
   font-family: sans-serif;
 }
 
+.selectedPiece{
+  height: 100px;
+  width: 100px;
+}
+
+.pieceContainer{
+  height: 60px;
+  width: 60px;
+  display: inline-block;
+}
+
 .piece {
   display: inline-block;
-  width: 80px;
-  height: 80px;
+  width: calc(100% - 30px);
+  height: calc(100% - 30px);
   border: solid black 10px;
   margin: 5px;
   line-height: 0px;
 }
 
-.selectme .piece {
+/*.selectme .piece {
   width: 30px;
   height: 30px;
   border: solid black 5px;
-}
+}*/
 
 .pieceQuater {
   width: 50%;
@@ -37,4 +48,7 @@ body {
 .board .space{
   display: inline-block;
   border: 1px solid black;
+  width: 80px;
+  height: 80px;
+  vertical-align: text-bottom;
 }
