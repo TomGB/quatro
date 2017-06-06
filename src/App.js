@@ -7,7 +7,7 @@ import Piece from './components/piece'
 import generatePieces from './gameLogic/generate-pieces'
 import checkWin from './gameLogic/check-win'
 
-function TurnMessage({text}) {
+function MessageToPlayer({text}) {
   return (<h2>{text}</h2>);
 }
 
@@ -64,6 +64,7 @@ class App extends Component {
           board: generateBoard(),
           pieces: generatePieces(),
           pieceSelected: null,
+          win: false,
         }
       ],
       stepNumber: 0,
@@ -73,26 +74,24 @@ class App extends Component {
   }
 
   boardSelection(i, j) {
-    console.log('board selected at:');
-    console.log(i, j);
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const board = current.board.slice();
 
     if(!current.pieceSelected){
-      console.log('no piece to place');
       return;
     }
 
     if (board[j][i]) {
-      console.log('board already has a piece there');
       return;
     }
 
     board[j][i] = current.pieceSelected;
 
+    let win = false;
+
     if (checkWin(board)) {
-      console.log('won');
+      win = true;
     }
 
     this.setState({
@@ -101,6 +100,7 @@ class App extends Component {
           ...current,
           board: board,
           pieceSelected: null,
+          win: win,
         }
       ]),
       stepNumber: history.length,
@@ -109,13 +109,11 @@ class App extends Component {
   }
 
   pieceSelection(i) {
-    console.log('pieceSelected:', i);
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const pieces = current.pieces.slice();
 
     if(current.pieceSelected){
-      console.log('piece is already selected');
       return;
     }
 
@@ -134,11 +132,38 @@ class App extends Component {
     });
   }
 
+  messageText() {
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    const current = history[history.length - 1];
+    const turn = Math.floor(this.state.stepNumber / 2);
+
+    let currentPlayer;
+    let otherPlayer;
+
+    if (turn % 2){
+      currentPlayer = this.state.playerOne;
+      otherPlayer = this.state.playerTwo;
+    } else {
+      currentPlayer = this.state.playerTwo;
+      otherPlayer = this.state.playerOne;
+    }
+
+    if (current.win) {
+      return `${otherPlayer} has won`;
+    } else {
+      if (current.pieceSelected) {
+        return `${currentPlayer} place the piece`;
+      } else {
+        return `${currentPlayer} select a piece for ${otherPlayer} to play`;
+      }
+    }
+
+
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
-
-    console.log(this.state.history)
 
     if (!current.gameStarted) {
       return (
@@ -151,7 +176,7 @@ class App extends Component {
       return (
         <div className='gameArea'>
           <PieceSelect pieces={current.pieces} onClick={i => this.pieceSelection(i)}/>
-          <TurnMessage text={current.pieceSelected?'Place the piece':'Select a piece for ' + (this.state.stepNumber%2?this.state.playerOne:this.state.playerTwo)+' to place.'} />
+          <MessageToPlayer text={this.messageText()} />
           <GameBoard board={current.board} onClick={(i, j) => this.boardSelection(i, j)}/>
           <SelectedPiece piece={current.pieceSelected} />
         </div>

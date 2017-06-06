@@ -45,10 +45,17 @@ body {
   border: 1px solid black;
 }
 
-.board .space{
+.board .space {
   display: inline-block;
   border: 1px solid black;
-  width: 80px;
-  height: 80px;
+  width: calc(25vw - 3px);
+  height: calc(25vw - 3px);
   vertical-align: text-bottom;
+}
+
+@media (min-width: 800px) {
+  .board .space {
+    width: calc(200px);
+    height: calc(200px);
+  }
 }

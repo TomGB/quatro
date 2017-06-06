@@ -24,8 +24,6 @@ function checkFour(fourPieces) {
     return false;
   }
 
-  console.log(fourPieces);
-
   var attr = ['tl', 'tr', 'bl', 'br'];
 
   for (var i = 0; i < attr.length; i++) {
