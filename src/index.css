@@ -2,14 +2,20 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  text-align: center;
 }
 
-.selectedPiece{
+.selectedPieceArea {
+  width: 100%;
+}
+
+.selectedPiece {
+  display: inline-block;
   height: 100px;
   width: 100px;
 }
 
-.pieceContainer{
+.pieceContainer {
   height: 60px;
   width: 60px;
   display: inline-block;
@@ -24,12 +30,6 @@ body {
   line-height: 0px;
 }
 
-/*.selectme .piece {
-  width: 30px;
-  height: 30px;
-  border: solid black 5px;
-}*/
-
 .pieceQuater {
   width: 50%;
   height: 50%;
@@ -40,6 +40,10 @@ body {
   background-color: black;
 }
 
+.messageToPlayer {
+  height: 70px;
+}
+
 .board {
   display: inline-block;
   border: 1px solid black;
@@ -48,14 +52,17 @@ body {
 .board .space {
   display: inline-block;
   border: 1px solid black;
-  width: calc(25vw - 3px);
-  height: calc(25vw - 3px);
+  width: calc(25vw - 4px);
+  height: calc(25vw - 4px);
   vertical-align: text-bottom;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 400px) {
   .board .space {
-    width: calc(200px);
-    height: calc(200px);
+    width: 96px;
+    height: 96px;
+  }
+  .messageToPlayer {
+    height: auto;
   }
 }
